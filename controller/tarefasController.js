@@ -23,6 +23,7 @@ const getAllTasks = async (req, res) => {
 
 const getPrioridade = async (req, res) => {
   try {
+    const prioridade = req.params.prioridade
     const completedTasks = await Task.findAll({ where: prioridade});
     res.json(completedTasks);
   } catch (error) {
