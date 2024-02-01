@@ -27,7 +27,7 @@ app.post('/task', taskController.createTask);
 app.get('/tasks', taskController.getAllTasks);
 app.put('/tasks/:id', taskController.updateTask);
 app.delete('/tasks/:id', taskController.deleteTask);
-app.get('/tasks/prioridade', taskController.getPrioridade);
+app.get('/tasks/:prioridade', taskController.getPrioridade);
 
 // Iniciar o servidor
 app.listen(port, () => {
