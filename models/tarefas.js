@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { format, parse } = require('date-fns');
 
 const taskSchema = new mongoose.Schema({
   titulo: { type: String, required: true },
@@ -14,6 +13,6 @@ const taskSchema = new mongoose.Schema({
 
 });
 
-const lista = mongoose.model('lista', taskSchema);
+const lista = mongoose.model('to-do', taskSchema);
 
 module.exports = lista;
