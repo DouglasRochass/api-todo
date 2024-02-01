@@ -21,9 +21,9 @@ const getAllTasks = async (req, res) => {
   }
 };
 
-const getCompletedTasks = async (req, res) => {
+const getPrioridade = async (req, res) => {
   try {
-    const completedTasks = await Task.find({ completed: true });
+    const completedTasks = await Task.findAll({ where: prioridade});
     res.json(completedTasks);
   } catch (error) {
     console.error('Erro ao obter tarefas completadas:', error);
@@ -67,4 +67,4 @@ const deleteTask = async (req, res) => {
   }
 };
 
-module.exports = { createTask, getAllTasks, updateTask, deleteTask, getCompletedTasks };
+module.exports = { createTask, getAllTasks, updateTask, deleteTask, getPrioridade };
