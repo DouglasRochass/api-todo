@@ -13,6 +13,6 @@ const taskSchema = new mongoose.Schema({
 
 });
 
-const lista = mongoose.model('to-do', taskSchema);
+const Lista = mongoose.model('todo', taskSchema);
 
-module.exports = lista;
+module.exports = Lista;
