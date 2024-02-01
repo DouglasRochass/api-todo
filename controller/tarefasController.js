@@ -23,14 +23,17 @@ const getAllTasks = async (req, res) => {
 
 const getPrioridade = async (req, res) => {
   try {
-    const prioridade = req.params.prioridade
-    const completedTasks = await Task.findAll({ where: prioridade});
-    res.json(completedTasks);
+    const prioridade = req.params.prioridade;
+
+    const tasks = await Task.find({ prioridade: prioridade });
+
+    res.json(tasks);
   } catch (error) {
-    console.error('Erro ao obter tarefas completadas:', error);
+    console.error('Erro ao obter tarefas por prioridade:', error);
     res.status(500).json({ error: 'Erro interno do servidor' });
   }
 };
+
 
 
 const updateTask = async (req, res) => {
