@@ -1,66 +1,52 @@
 const Task = require('../models/tarefas');
 
-const createTask = async (req, res) => {
+exports.createTask = async (req, res) => {
   try {
-    const newTask = new Task(req.body);
-    await newTask.save();
-    res.status(201).json({ success: true, message: 'Tarefa criada com sucesso' });
+    const {titulo, descricao,prioridade, data, categoria} = req.body;
+    const newTask = await Task.create({titulo, descricao,prioridade, data, categoria });
+    res.status(201).json({ success: true, message: 'Tarefa criada com sucesso', task: newTask });
   } catch (error) {
     console.error('Erro ao criar tarefa:', error);
     res.status(500).json({ success: false, error: 'Erro interno do servidor' });
   }
 };
 
-const getAllTasks = async (req, res) => {
+exports.getAllTasks = async (req, res) => {
   try {
-    const tasks = await Task.find();
-    res.json({tasks });
+    const tasks = await Task.findAll();
+    res.json({ tasks });
   } catch (error) {
     console.error('Erro ao obter tarefas:', error);
-    res.status(500).json({error: 'Erro interno do servidor' });
-  }
-};
-
-const getPrioridade = async (req, res) => {
-  try {
-    const prioridade = req.params.prioridade;
-
-    const tasks = await Task.find({ prioridade: prioridade });
-
-    res.json(tasks);
-  } catch (error) {
-    console.error('Erro ao obter tarefas por prioridade:', error);
     res.status(500).json({ error: 'Erro interno do servidor' });
   }
 };
 
 
 
-const updateTask = async (req, res) => {
+exports.updateTask = async (req, res) => {
   try {
     const taskId = req.params.id;
     const updatedTask = req.body;
 
-    const result = await Task.findByIdAndUpdate(taskId, updatedTask, { new: true });
+    const [updatedCount, updatedTasks] = await Task.update(updatedTask, { where: { id: taskId }, returning: true });
 
-    if (!result) {
+    if (updatedCount === 0 || !updatedTasks) {
       return res.status(404).json({ success: false, message: 'Tarefa não encontrada' });
     }
 
-    res.json({ success: true, message: 'Tarefa atualizada com sucesso', task: result });
+    res.json({ success: true, message: 'Tarefa atualizada com sucesso', task: updatedTasks[0] });
   } catch (error) {
     console.error('Erro ao atualizar tarefa:', error);
     res.status(500).json({ success: false, error: 'Erro interno do servidor' });
   }
 };
 
-const deleteTask = async (req, res) => {
+exports.deleteTask = async (req, res) => {
   try {
     const taskId = req.params.id;
+    const deletedCount = await Task.destroy({ where: { id: taskId } });
 
-    const result = await Task.findByIdAndDelete(taskId);
-
-    if (!result) {
+    if (deletedCount === 0) {
       return res.status(404).json({ success: false, message: 'Tarefa não encontrada' });
     }
 
@@ -70,5 +56,3 @@ const deleteTask = async (req, res) => {
     res.status(500).json({ success: false, error: 'Erro interno do servidor' });
   }
 };
-
-module.exports = { createTask, getAllTasks, updateTask, deleteTask, getPrioridade };

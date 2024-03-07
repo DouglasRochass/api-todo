@@ -1,19 +1,14 @@
-const mongoose = require('mongoose');
-const { format, parse } = require('date-fns');
+const { Sequelize, DataTypes } = require('sequelize');
+const sequelize = require('../db');
 
-const taskSchema = new mongoose.Schema({
-  titulo: { type: String, required: true },
-  descricao: { type: String },
-  prioridade: { type: String, required: true },
-  categoria: {type: String, required: true},
-  data: {
-    type: Date,
-    required: true,
-  },
-  completado: { type: Boolean, default: false },
-
+const Task = sequelize.define('Task', {
+  titulo: { type: DataTypes.STRING, allowNull: false },
+  descricao: { type: DataTypes.STRING },
+  prioridade: { type: DataTypes.STRING, allowNull: false },
+  data: { type: DataTypes.DATE, allowNull: false },
+  categoria: { type: DataTypes.STRING, allowNull: false }
 });
 
-const Task = mongoose.model('Task', taskSchema);
+Task.sync(); // Sincroniza o modelo com o banco de dados
 
 module.exports = Task;
